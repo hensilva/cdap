@@ -15,6 +15,13 @@
  */
 
 import React from 'react';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
@@ -27,6 +34,19 @@ import T from 'i18n-react';
 import classnames from 'classnames';
 
 const I18N_PREFIX = 'features.PreviewData.DataView.Table';
+
+const CustomTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.grey['300'],
+    color: theme.palette.common.white,
+    padding: 10,
+    fontSize: 14,
+  },
+  body: {
+    padding: 10,
+    fontSize: 14,
+  },
+}))(TableCell);
 
 export const messageTextStyle = {
   fontSize: '1.3rem !important',
@@ -116,36 +136,33 @@ const DataTableView: React.FC<IDataTableProps> = ({
     }
     return field;
   };
+
+  const renderHeader = (header: string[]) => {
+    return (
+      <TableHead>
+        <TableRow>
+          {headers.map((fieldName, i) => {
+            const processedFieldName = format(fieldName);
+            return <CustomTableCell>{processedFieldName}</CustomTableCell>;
+          })}
+        </TableRow>
+      </TableHead>
+    );
+  };
+
   const renderList = (visibleNodeCount: number, startNode: number) => {
     return records.slice(startNode, startNode + visibleNodeCount).map((record, i) => {
+      const rowIndex = startNode + i + 1;
       return (
-        <React.Fragment>
-          <Grid
-            container
-            direction="row"
-            wrap="nowrap"
-            justify="space-evenly"
-            className={classnames(classes.row, { oddRow: (i + startNode + 1) % 2 })}
-            key={`gridrow-${i}`}
-          >
-            <Grid item className={classnames(classes.cell, classes.indexCell)}>
-              {i + 1 + startNode}
-            </Grid>
+        <TableBody>
+          <TableRow>
+            <CustomTableCell>{rowIndex}</CustomTableCell>
             {headers.map((fieldName, k) => {
               const processedValue = format(record[fieldName]);
-              return (
-                <Grid
-                  item
-                  className={classnames(classes.cell, classes.tableCell)}
-                  key={`table-cell-${k}`}
-                  title={processedValue}
-                >
-                  {processedValue}
-                </Grid>
-              );
+              return <CustomTableCell>{processedValue}</CustomTableCell>;
             })}
-          </Grid>
-        </React.Fragment>
+          </TableRow>
+        </TableBody>
       );
     });
   };
@@ -160,41 +177,14 @@ const DataTableView: React.FC<IDataTableProps> = ({
 
   return (
     <Paper className={classnames(classes.root, classes.tableContainer)}>
-      <Grid container direction="column" wrap="nowrap">
-        <Grid item>
-          <Grid
-            container
-            direction="row"
-            wrap="nowrap"
-            justify="space-evenly"
-            className={classes.headerRow}
-          >
-            <Grid item className={classnames(classes.cell, classes.indexCell)} />
-            {headers.map((fieldName, i) => {
-              const processedFieldName = format(fieldName);
-              return (
-                <Grid
-                  item
-                  key={`header-cell-${i}`}
-                  className={classnames(classes.cell, classes.tableCell)}
-                  title={processedFieldName}
-                >
-                  {processedFieldName}
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Grid>
-        <Grid item>
-          <VirtualScroll
-            itemCount={() => records.length}
-            visibleChildCount={25}
-            childHeight={40}
-            renderList={renderList}
-            childrenUnderFold={10}
-          />
-        </Grid>
-      </Grid>
+      <VirtualScroll
+        itemCount={() => records.length}
+        visibleChildCount={25}
+        childHeight={40}
+        renderList={renderList}
+        childrenUnderFold={10}
+        headerEl={renderHeader(headers)}
+      />
     </Paper>
   );
 };
