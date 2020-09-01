@@ -33,7 +33,7 @@ import classnames from 'classnames';
 
 const I18N_PREFIX = 'features.PreviewData.DataView.Table';
 
-const CustomTableCell = withStyles((theme) => ({
+export const CustomTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.grey['300'],
     color: theme.palette.common.white,
@@ -127,7 +127,7 @@ const DataTableView: React.FC<IDataTableProps> = ({
     return field;
   };
 
-  const renderHeader = (header: string[]) => {
+  const renderHeader = () => {
     return (
       <TableHead>
         <TableRow className={classnames(classes.headerRow)}>
@@ -186,7 +186,7 @@ const DataTableView: React.FC<IDataTableProps> = ({
         childHeight={40}
         renderList={renderList}
         childrenUnderFold={10}
-        headerEl={renderHeader(headers)}
+        headerEl={renderHeader()}
       />
     </Paper>
   );

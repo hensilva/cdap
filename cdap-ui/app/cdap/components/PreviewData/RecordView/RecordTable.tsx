@@ -17,10 +17,14 @@
 import React from 'react';
 import VirtualScroll from 'components/VirtualScroll';
 import { PREVIEW_STATUS } from 'services/PreviewStatus';
-import Grid from '@material-ui/core/Grid';
+
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import ThemeWrapper from 'components/ThemeWrapper';
-import { styles as tableStyles } from 'components/PreviewData/DataView/Table';
+import { CustomTableCell, styles as tableStyles } from 'components/PreviewData/DataView/Table';
 import classnames from 'classnames';
 import T from 'i18n-react';
 import Heading, { HeadingTypes } from 'components/Heading';
@@ -38,12 +42,12 @@ const childrenUnderFold = 10;
 const styles = (theme): StyleRules => ({
   ...tableStyles(theme),
   recordCell: {
-    width: '50%',
+    // width: '50%',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     '&:first-of-type': {
-      borderRight: `1px solid ${theme.palette.grey['500']}`,
+      // borderRight: `1px solid ${theme.palette.grey['500']}`,
       fontWeight: 500,
     },
   },
@@ -104,6 +108,17 @@ const RecordTableView: React.FC<IRecordTableProps> = ({
     );
   };
 
+  const renderHeader = () => {
+    return (
+      <TableHead>
+        <TableRow className={classes.headerRow}>
+          <CustomTableCell>{T.translate(`${I18N_PREFIX}.fieldName`)}</CustomTableCell>
+          <CustomTableCell>{T.translate(`${I18N_PREFIX}.value`)}</CustomTableCell>
+        </TableRow>
+      </TableHead>
+    );
+  };
+
   const renderList = (visibleNodeCount: number, startNode: number) => {
     if (!record) {
       return;
@@ -111,33 +126,28 @@ const RecordTableView: React.FC<IRecordTableProps> = ({
     return headers.slice(startNode, startNode + visibleNodeCount).map((fieldName, i) => {
       const processedFieldName = format(fieldName);
       const processedValue = format(record[fieldName]);
+      const rowIndex = startNode + i + 1;
+
       return (
-        <React.Fragment>
-          <Grid
-            container
-            direction="row"
-            wrap="nowrap"
-            className={classnames(classes.row, { oddRow: (i + startNode + 1) % 2 })}
-            key={`gridrow-${i}`}
+        <TableBody>
+          <TableRow
+            className={classnames(classes.row, { oddRow: rowIndex % 2 })}
+            key={`record-row-${i}`}
           >
-            <Grid
-              item
+            <CustomTableCell
               className={classnames(classes.cell, classes.recordCell)}
-              title={processedFieldName}
               data-cy={`fieldname-${processedFieldName}`}
             >
               {processedFieldName}
-            </Grid>
-            <Grid
-              item
+            </CustomTableCell>
+            <CustomTableCell
               className={classnames(classes.cell, classes.recordCell)}
-              title={processedValue}
               data-cy={`value-${processedValue}`}
             >
               {processedValue}
-            </Grid>
-          </Grid>
-        </React.Fragment>
+            </CustomTableCell>
+          </TableRow>
+        </TableBody>
       );
     });
   };
@@ -149,33 +159,14 @@ const RecordTableView: React.FC<IRecordTableProps> = ({
 
   return (
     <div className={classnames(classes.root, classes.recordContainer)}>
-      <Grid container direction="column" wrap="nowrap">
-        <Grid item>
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            className={classes.headerRow}
-          >
-            <Grid item className={classnames(classes.cell, classes.recordCell)}>
-              {T.translate(`${I18N_PREFIX}.fieldName`)}
-            </Grid>
-            <Grid item className={classnames(classes.cell, classes.recordCell)}>
-              {T.translate(`${I18N_PREFIX}.value`)}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <VirtualScroll
-            itemCount={() => headers.length}
-            visibleChildCount={visibleChildCount}
-            childHeight={childHeight}
-            renderList={renderList}
-            childrenUnderFold={childrenUnderFold}
-          />
-        </Grid>
-      </Grid>
+      <VirtualScroll
+        itemCount={() => headers.length}
+        visibleChildCount={visibleChildCount}
+        childHeight={childHeight}
+        renderList={renderList}
+        childrenUnderFold={childrenUnderFold}
+        headerEl={renderHeader()}
+      />
     </div>
   );
 };
