@@ -16,14 +16,12 @@
 
 import React from 'react';
 
-import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
 import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import isEmpty from 'lodash/isEmpty';
 import { PREVIEW_STATUS } from 'services/PreviewStatus';
@@ -78,19 +76,11 @@ export const styles = (theme): StyleRules => ({
   },
   cell: {
     textAlign: 'left',
-    height: '40px',
-    lineHeight: '40px',
     whiteSpace: 'nowrap',
     padding: '0px 10px',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-  },
-
-  // TO DO: Currently the width is fixed. Future plan is to let users vary the column widths
-  tableCell: {
-    width: '120px',
     borderLeft: `1px solid ${theme.palette.grey['500']}`,
-    flexGrow: 1,
   },
   indexCell: {
     width: '50px',
@@ -140,10 +130,11 @@ const DataTableView: React.FC<IDataTableProps> = ({
   const renderHeader = (header: string[]) => {
     return (
       <TableHead>
-        <TableRow>
+        <TableRow className={classnames(classes.headerRow)}>
+          <CustomTableCell className={classes.indexCell} />
           {headers.map((fieldName, i) => {
             const processedFieldName = format(fieldName);
-            return <CustomTableCell>{processedFieldName}</CustomTableCell>;
+            return <CustomTableCell key={`header-cell-${i}`}>{processedFieldName}</CustomTableCell>;
           })}
         </TableRow>
       </TableHead>
@@ -151,15 +142,27 @@ const DataTableView: React.FC<IDataTableProps> = ({
   };
 
   const renderList = (visibleNodeCount: number, startNode: number) => {
-    return records.slice(startNode, startNode + visibleNodeCount).map((record, i) => {
-      const rowIndex = startNode + i + 1;
+    return records.slice(startNode, startNode + visibleNodeCount).map((record, j) => {
+      const rowIndex = startNode + j + 1;
       return (
         <TableBody>
-          <TableRow>
-            <CustomTableCell>{rowIndex}</CustomTableCell>
+          <TableRow
+            key={`table-row-${j}`}
+            className={classnames(classes.row, { oddRow: rowIndex % 2 })}
+          >
+            <CustomTableCell
+              className={classnames(classes.indexCell, classes.cell)}
+              key={`index-cell-${j}`}
+            >
+              {rowIndex}
+            </CustomTableCell>
             {headers.map((fieldName, k) => {
               const processedValue = format(record[fieldName]);
-              return <CustomTableCell>{processedValue}</CustomTableCell>;
+              return (
+                <CustomTableCell key={`table-cell-${j}-${k}`} className={classes.cell}>
+                  {processedValue}
+                </CustomTableCell>
+              );
             })}
           </TableRow>
         </TableBody>
