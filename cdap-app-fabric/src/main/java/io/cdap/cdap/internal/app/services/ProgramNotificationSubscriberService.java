@@ -22,6 +22,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
+import com.sun.xml.internal.xsom.impl.Const;
 import io.cdap.cdap.api.metrics.MetricsCollectionService;
 import io.cdap.cdap.api.schedule.SchedulableProgramType;
 import io.cdap.cdap.api.workflow.ScheduleProgramInfo;
@@ -409,6 +410,17 @@ public class ProgramNotificationSubscriberService extends AbstractNotificationSu
 
       getEmitMetricsRunnable(programRunId, recordedRunRecord,
                              STATUS_METRICS_NAME.get(programRunStatus)).ifPresent(runnables::add);
+
+      // emit provisioning time metric
+      long runTime = endTimeSecs - RunIds.getTime(programRunId.getRun(), TimeUnit.SECONDS);
+      ProgramOptions programOptions = ProgramOptions.fromNotification(notification, GSON);
+      Map<String, String> arguments = recordedRunRecord.getSystemArgs();
+      SystemArguments
+        .getProfileIdFromArgs(programRunId.getNamespaceId(), arguments)
+        .ifPresent(profileId -> emitRunTimeMetric(programRunId, profileId,
+                                                  arguments.get(SystemArguments.PROFILE_PROVISIONER),
+                                                  programOptions, runTime));
+
       runnables.add(() -> {
         programCompletionNotifiers.forEach(notifier -> notifier.onProgramCompleted(programRunId,
                                                                                    recordedRunRecord.getStatus()));
@@ -670,6 +682,28 @@ public class ProgramNotificationSubscriberService extends AbstractNotificationSu
     metricsCollectionService.getContext(tags).gauge(Constants.Metrics.Program.PROGRAM_PROVISIONING_DELAY_SECONDS,
                                                     provisioningTime);
   }
+
+  /**
+   * Emit the pipeline run time metric. The tags are constructed with the program run id,
+   * profile id, provisioner name and program options.
+   */
+  private void emitRunTimeMetric(ProgramRunId programRunId, ProfileId profileId, String provisioner,
+                                          ProgramOptions programOptions, long runTime) {
+    Map<String, String> tags = ImmutableMap.<String, String>builder()
+      .put(Constants.Metrics.Tag.PROFILE_SCOPE, profileId.getScope().name())
+      .put(Constants.Metrics.Tag.PROFILE, profileId.getProfile())
+      .put(Constants.Metrics.Tag.NAMESPACE, programRunId.getNamespace())
+      .put(Constants.Metrics.Tag.PROGRAM_TYPE, programRunId.getType().getPrettyName())
+      .put(Constants.Metrics.Tag.APP, programRunId.getApplication())
+      .put(Constants.Metrics.Tag.PROGRAM, programRunId.getProgram())
+      .put(Constants.Metrics.Tag.PROVISIONER, provisioner)
+      .put(Constants.Metrics.Tag.RUN_ID, programRunId.getRun())
+      .put(Constants.Metrics.Tag.COMPONENT, Constants.Service.APP_FABRIC_HTTP)
+      .build();
+    metricsCollectionService.getContext(tags).gauge(Constants.Metrics.Program.PROGRAM_RUN_TIME_SECONDS,
+                                                    runTime);
+  }
+
 
   /**
    * Returns an instance of {@link AppMetadataStore}.

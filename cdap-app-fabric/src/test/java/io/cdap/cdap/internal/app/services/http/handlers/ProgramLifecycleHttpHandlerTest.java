@@ -506,6 +506,7 @@ public class ProgramLifecycleHttpHandlerTest extends AppFabricTestBase {
     verifyProgramRuns(sleepWorkflow1, ProgramRunStatus.COMPLETED, numWorkflowRunsStopped + 1);
     // cluster provisioning time should be at least 1 second
     Assert.assertTrue(getProfileTotalMetric(Constants.Metrics.Program.PROGRAM_PROVISIONING_DELAY_SECONDS) >= 1);
+    Assert.assertTrue(getProfileTotalMetric(Constants.Metrics.Program.PROGRAM_RUN_TIME_SECONDS) > 0);
 
     historyStatusWithRetry(sleepWorkflow1.toEntityId(), ProgramRunStatus.COMPLETED, 2);
     deleteApp(sleepWorkflow1.getApplication(), 200);
