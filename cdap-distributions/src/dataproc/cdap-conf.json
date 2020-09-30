@@ -24,6 +24,7 @@
       "hive_classpath": "$(until $(which hive &>/dev/null); do sleep 5; done)${HIVE_CLASSPATH:-/etc/hive/conf:$(ls -1 /usr/lib/hive/lib/*.jar | tr '\\n' ':')$(if [[ -r /etc/hive/conf/hive-env.sh ]]; then source /etc/hive/conf/hive-env.sh ; fi ; if [[ -d ${HIVE_AUX_JARS_PATH} ]]; then ls -1 ${HIVE_AUX_JARS_PATH}/*.jar | tr '\\n' ':'; else echo ${HIVE_AUX_JARS_PATH} | tr ',' ':'; fi)$(ls -1 /usr/lib/hive/auxlib/*.jar 2>/dev/null | tr '\\n' ':')$(sleep 30; if [[ -d /usr/lib/tez/lib ]]; then ls -1 /usr/lib/tez/*.jar /usr/lib/tez/lib/*.jar 2>/dev/null  | tr '\\n' ':'; fi)}",
       "hive_exec_engine": "mr",
       "spark_home": "/usr/lib/spark",
+      "spark_compat": "{{SPARK_COMPAT}}",
       "tez_home": "/usr/lib/tez",
       "tez_conf_dir": "/etc/tez/conf",
       "zookeeper_home": "$(until $(which zookeeper-client &>/dev/null); do sleep 5; done; echo /usr/lib/zookeeper)"
