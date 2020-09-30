@@ -33,6 +33,7 @@ knife supermarket download --force ambari || die "Cannot download cookbook ambar
 knife supermarket download --force apt || die "Cannot download cookbook apt"
 knife supermarket download --force ark || die "Cannot download cookbook ark"
 knife supermarket download --force build-essential || die "Cannot download cookbook build-essential"
+knife supermarket download --force cdap || die "Cannot download cookbook dpkg_autostart"
 knife supermarket download --force dpkg_autostart || die "Cannot download cookbook dpkg_autostart"
 knife supermarket download --force hadoop || die "Cannot download cookbook hadoop"
 knife supermarket download --force homebrew || die "Cannot download cookbook homebrew"
