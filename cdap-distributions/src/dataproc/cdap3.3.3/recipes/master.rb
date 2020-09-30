@@ -20,19 +20,19 @@
 include_recipe 'cdap::default'
 
 # All supported release versions support HBase 0.96 and 0.98
-pkgs = ['cdap-hbase-compat-0.96', 'cdap-hbase-compat-0.98']
-pkgs += ['cdap-hbase-compat-1.0', 'cdap-hbase-compat-1.0-cdh'] if node['cdap']['version'].to_f >= 3.1
-pkgs += ['cdap-hbase-compat-1.1'] if node['cdap']['version'].to_f >= 3.2
-pkgs += ['cdap-hbase-compat-1.0-cdh5.5.0'] if node['cdap']['version'].to_f >= 3.3
-pkgs += ['cdap-hbase-compat-1.2-cdh5.7.0'] if node['cdap']['version'].to_f >= 3.4
-pkgs += ['cdap-hbase-compat-0.94'] if node['cdap']['version'].to_f < 3.1
+#pkgs = ['cdap-hbase-compat-0.96', 'cdap-hbase-compat-0.98']
+#pkgs += ['cdap-hbase-compat-1.0', 'cdap-hbase-compat-1.0-cdh'] if node['cdap']['version'].to_f >= 3.1
+#pkgs += ['cdap-hbase-compat-1.1'] if node['cdap']['version'].to_f >= 3.2
+#pkgs += ['cdap-hbase-compat-1.0-cdh5.5.0'] if node['cdap']['version'].to_f >= 3.3
+#pkgs += ['cdap-hbase-compat-1.2-cdh5.7.0'] if node['cdap']['version'].to_f >= 3.4
+#pkgs += ['cdap-hbase-compat-0.94'] if node['cdap']['version'].to_f < 3.1
 
-pkgs.each do |pkg|
-  package pkg do
-    version node['cdap']['version']
-    action :install
-  end
-end
+#pkgs.each do |pkg|
+#  package pkg do
+#    version node['cdap']['version']
+#    action :install
+#  end
+#end
 
 package 'cdap-master' do
   action :install
