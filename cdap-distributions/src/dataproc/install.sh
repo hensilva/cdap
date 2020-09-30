@@ -1,14 +1,16 @@
 #!/bin/bash
+# based on cdap/cdap-distributions/src/emr/install.sh
+
 CDAP_BRANCH=release/6.2
 CDAP_VERSION=6.2.0-1
-CHEF_VERSION=14.15.6 # 14.15.6 e 13.12.14 ok. Testar 16.5.77 ou 15.14.0 (a partir de 16 requer supermerket)
+CHEF_VERSION=14.15.6 # 14.15.6 or 13.12.14
 CHEF_COOKBOOK=3.3.3
-COOKBOOK_DOWNLOAD=v1 # v1 ok. Testar v2
+COOKBOOK_DOWNLOAD=v1
 EXPLORE_ENABLED='false'
 SERVICE_DELAY=240
 DASHBOARD_PORT=8000
 CDAP_APT_REPO_URL=https://repository.cdap.io/ubuntu/precise/amd64/cdap/6.2
-GIT_REPO=https://github.com/hensilva/cdap.git # original https://github.com/cdapio/cdap.git
+GIT_REPO=https://github.com/hensilva/cdap.git 
 SPARK_COMPAT=spark2_2.11
 
 __tmpdir="/tmp/cdap_install_temp"
