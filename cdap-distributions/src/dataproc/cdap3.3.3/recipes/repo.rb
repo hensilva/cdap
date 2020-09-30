@@ -22,18 +22,20 @@ maj_min = node['cdap']['version'].to_f
 case node['platform_family']
 when 'debian'
   include_recipe 'apt'
-  codename = node['lsb']['codename']
-  case codename
-  when 'raring', 'saucy', 'trusty', 'utopic', 'vivid', 'wily', 'xenial', 'wheezy', 'jessie', 'stretch'
-    codename = 'precise'
-    Chef::Log.warn('Overriding repository distribution to Precise')
-  end
+  # codename = node['lsb']['codename']
+  # case codename
+  # when 'raring', 'saucy', 'trusty', 'utopic', 'vivid', 'wily', 'xenial', 'wheezy', 'jessie', 'stretch'
+  #  codename = 'precise'
+  #  Chef::Log.warn('Overriding repository distribution to Precise')
+  #end
+  condename = 'precise'
   apt_repository "cdap-#{maj_min}" do
     uri node['cdap']['repo']['apt_repo_url']
     distribution codename
     components node['cdap']['repo']['apt_components']
     action :add
     arch 'amd64'
+    trusted true
     key "#{node['cdap']['repo']['apt_repo_url']}/pubkey.gpg"
   end
   file '/etc/apt/sources.list.d/cask.list' do
