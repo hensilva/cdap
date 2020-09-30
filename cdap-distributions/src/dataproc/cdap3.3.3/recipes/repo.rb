@@ -28,7 +28,7 @@ when 'debian'
   #  codename = 'precise'
   #  Chef::Log.warn('Overriding repository distribution to Precise')
   #end
-  condename = 'precise'
+  codename = 'precise'
   apt_repository "cdap-#{maj_min}" do
     uri node['cdap']['repo']['apt_repo_url']
     distribution codename
