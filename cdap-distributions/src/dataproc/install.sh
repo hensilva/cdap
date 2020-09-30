@@ -5,7 +5,6 @@ CDAP_BRANCH=release/6.2
 CDAP_VERSION=6.2.0-1
 CHEF_VERSION=14.15.6 # 14.15.6 or 13.12.14
 CHEF_COOKBOOK=3.3.3
-COOKBOOK_DOWNLOAD=v1
 EXPLORE_ENABLED='false'
 SERVICE_DELAY=240
 DASHBOARD_PORT=8000
@@ -38,8 +37,8 @@ sudo ${__packerdir}/cookbook-dir.sh
 # Install cookbooks via knife
 mkdir -p ${__tmpdir}/cookbook-download
 cd ${__tmpdir}/cookbook-download
-sudo chmod +x ${__packerdir}/cookbook-setup-${COOKBOOK_DOWNLOAD}.sh
-sudo ${__packerdir}/cookbook-setup-${COOKBOOK_DOWNLOAD}.sh
+sudo chmod +x ${__packerdir}/cookbook-setup.sh
+sudo ${__packerdir}/cookbook-setup.sh
 
 # Copy recipe workarounds
 sudo cp -p ${__cdap_site_dir}/cdap${CHEF_COOKBOOK}/recipes/*.rb /var/chef/cookbooks/cdap/recipes
