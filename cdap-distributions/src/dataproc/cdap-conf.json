@@ -10,7 +10,7 @@
       "enable.unrecoverable.reset": "true",
       "router.bind.port": "11015",
       "hbase.version.resolution.strategy": "auto.latest",
-      "hive.version.resolution.strategy": "auto.latest"
+      "hive.version.resolution.strategy": "auto.latest",
       "router.server.address": "{{ROUTER_IP_ADDRESS}}"
     },
     "cdap_env": {
