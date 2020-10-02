@@ -1,5 +1,8 @@
 #!/bin/bash
 # based on cdap/cdap-distributions/src/emr/install.sh
+# some changes to allow installation on dataproc (similar to EMR)
+# lots of workarounds used here
+# USE AT YOUR OWN RISK
 
 CDAP_BRANCH=release/6.2
 CDAP_VERSION=6.2.0-1
