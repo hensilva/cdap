@@ -69,5 +69,6 @@ sudo su - -c "mkdir -p /mnt/cdap/kafka-logs && chown -R cdap /mnt/cdap"
 for i in /etc/init.d/cdap-*; do
   __svc=$(basename ${i})
   echo ${__svc}
+  sudo systemctl enable ${__svc}
   sudo service ${__svc} start
 done
