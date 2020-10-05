@@ -11,7 +11,7 @@
       "router.bind.port": "11015",
       "hbase.version.resolution.strategy": "auto.latest",
       "hive.version.resolution.strategy": "auto.latest",
-      "router.server.address": "{{ROUTER_IP_ADDRESS}}"
+      "router.server.address": "{{ROUTER_IP_ADDRESS}}",
       "ui.theme.file": "/etc/cdap/conf/ui.json"
     },
     "cdap_env": {
