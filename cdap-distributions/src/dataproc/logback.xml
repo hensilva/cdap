@@ -14,10 +14,6 @@
   -->
 
 <configuration>
-
-    <!--
-      Disabling some chatty loggers.
-    -->
     <logger name="org.apache.commons.beanutils" level="ERROR"/>
     <logger name="org.apache.zookeeper.server" level="ERROR"/>
     <logger name="org.apache.zookeeper" level="ERROR"/>
@@ -26,7 +22,6 @@
     <logger name="org.spark-project" level="WARN"/>
     <logger name="org.spark_project" level="WARN"/>
     <logger name="org.apache.hadoop" level="WARN"/>
-    <!--See CDAP-7948-->
     <logger name="org.apache.hadoop.ipc.Client" level="ERROR"/>
     <logger name="org.apache.hive" level="WARN"/>
     <logger name="org.quartz.core" level="WARN"/>
@@ -38,75 +33,27 @@
     
     <!--HENRIQUE-->
     <logger name="io.netty.util.internal" level="OFF"/>
-    <logger name="io.cdap" level="WARN"/>
+    <!--<logger name="io.cdap" level="WARN"/>-->
     <logger name="io.grpc" level="OFF"/>
     
-    <!-- Because of HADOOP-11180 move this to Error -->
     <logger name="org.apache.hadoop.security.token.Token" level="ERROR"/>
     <logger name="org.apache.hadoop.metrics2" level="ERROR"/>
     <logger name="akka" level="WARN"/>
     <logger name="Remoting" level="WARN"/>
     <logger name="com.sun.jersey" level="WARN"/>
-
     <logger name="WriteAheadLogManager " level="WARN"/>
     <logger name="org.apache.kafka.common.config.AbstractConfig" level="WARN"/>
-
-    <!-- HttpRequestLog is not used and expects log4j logging or logs a WARN message -->
     <logger name="org.apache.hadoop.http.HttpRequestLog" level="ERROR"/>
-
     <logger name="org.apache.twill" level="INFO"/>
     <logger name="org.apache.twill.internal.kafka.client.SimpleKafkaConsumer" level="WARN"/>
     <logger name="io.cdap.cdap" level="INFO"/>
-    <!--
-      The netty http library logs an ERROR always if it is raised
-      not from user handler, which usually is due to network error.
-      Disabling the log to avoid flooding.
-    -->
     <logger name="io.cdap.http.HttpDispatcher" level="OFF"/>
-
-
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
       <encoder>
         <pattern>%d{ISO8601} - %-5p [%t:%C{1}@%L] - %m%n</pattern>
       </encoder>
     </appender>
-
     <root level="ERROR">
       <appender-ref ref="Console"/>
     </root>
-
-    <!--
-      Uncomment the following section to enable access logging by the Authentication Server and Router processes.
-      Log output will be in the standard Apache HTTPd access log format (see
-      http://httpd.apache.org/docs/2.2/logs.html#accesslog).
-    -->
-    <!--
-    <appender name="AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
-      <file>access.log</file>
-      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-        <fileNamePattern>access.log.%d{yyyy-MM-dd}</fileNamePattern>
-        <maxHistory>30</maxHistory>
-      </rollingPolicy>
-      <encoder>
-        <pattern>%msg%n</pattern>
-      </encoder>
-    </appender>
-    <logger name="http-access" level="TRACE" additivity="false">
-      <appender-ref ref="AUDIT" />
-    </logger>
-    <appender name="EXTERNAL_AUTH_AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
-      <file>external_auth_access.log</file>
-      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-        <fileNamePattern>external_auth_access.log.%d{yyyy-MM-dd}</fileNamePattern>
-        <maxHistory>30</maxHistory>
-      </rollingPolicy>
-      <encoder>
-        <pattern>%msg%n</pattern>
-      </encoder>
-    </appender>
-    <logger name="external-auth-access" level="TRACE" additivity="false">
-      <appender-ref ref="EXTERNAL_AUTH_AUDIT" />
-    </logger>
-    -->
-
 </configuration>
