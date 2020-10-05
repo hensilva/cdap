@@ -34,11 +34,16 @@
     <logger name="org.apache.hive" level="WARN"/>
     <logger name="org.quartz.core" level="WARN"/>
     <logger name="org.eclipse.jetty" level="WARN"/>
-    <logger name="io.netty.util.internal" level="WARN"/>
     <logger name="org.apache.tephra.distributed.AbstractClientProvider" level="WARN"/>
     <logger name="org.mortbay.log" level="WARN"/>
     <logger name="SecurityLogger.org.apache.hadoop.security.authorize.ServiceAuthorizationManager" level="WARN"/>
     <logger name="SecurityLogger.org.apache.hadoop.ipc.Server" level="WARN"/>
+    
+    <!--HENRIQUE-->
+    <logger name="io.netty.util.internal" level="OFF"/>
+    <logger name="io.cdap" level="WARN"/>
+    <logger name="io.grpc" level="OFF"/>
+    
     <!-- Because of HADOOP-11180 move this to Error -->
     <logger name="org.apache.hadoop.security.token.Token" level="ERROR"/>
     <logger name="org.apache.hadoop.metrics2" level="ERROR"/>
